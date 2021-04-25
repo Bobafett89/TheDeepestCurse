@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class BreakableWall : MonoBehaviour
 {
@@ -11,7 +12,7 @@ public class BreakableWall : MonoBehaviour
         {
             if (IsUpgadeNeeded && Movement.PickaxeLevel == 2)
             {
-                gameObject.SetActive(false);
+                SceneManager.LoadScene("GoodEnd");
             }
             else if(!IsUpgadeNeeded)
             {

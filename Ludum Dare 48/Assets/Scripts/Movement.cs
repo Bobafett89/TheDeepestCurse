@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Movement : MonoBehaviour
 {
@@ -10,13 +11,17 @@ public class Movement : MonoBehaviour
     static public float ceiling;
     static public Transform trsn;
     static public SpriteRenderer sprt;
-    static public bool AbleToHit, AbleToHook, AbleToDash, AbleToJump, IsTurned, IsDashActive, IsClimbing, IsHooked, n;
+    static public bool AbleToHit, AbleToHook, AbleToDash, AbleToJump, IsTurned, IsDashActive, IsClimbing, IsHooked;
     static public Rigidbody2D rgd;
+    static public Animator anim;
+    static public LineRenderer ln;
     private void Awake()
     {
         rgd = GetComponent<Rigidbody2D>();
         trsn = GetComponent<Transform>();
         sprt = GetComponent<SpriteRenderer>();
+        anim = GetComponent<Animator>();
+        ln = GetComponent<LineRenderer>();
         PickaxeLevel = 1;
         ceiling = 0;
         tjump = 1;
@@ -28,10 +33,13 @@ public class Movement : MonoBehaviour
         IsTurned = false;
         IsDashActive = false;
         IsHooked = false;
-        n = false;
     }
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            SceneManager.LoadScene("MainMenu");
+        }
         if (!IsDashActive)
         {
 
@@ -42,30 +50,38 @@ public class Movement : MonoBehaviour
                 {
                     rgd.velocity = new Vector2(speedX, rgd.velocity.y);
                     IsTurned = false;
+                    anim.SetBool("Running", true);
                 }
                 else if (Input.GetKey(KeyCode.A))
                 {
                     rgd.velocity = new Vector2(-speedX, rgd.velocity.y);
                     IsTurned = true;
+                    anim.SetBool("Running", true);
                 }
                 else
                 {
                     rgd.velocity = new Vector2(0, rgd.velocity.y);
+                    anim.SetBool("Running", false);
                 }
                 sprt.flipX = IsTurned;
 
 
                 if (!IsClimbing)
                 {
-
+                    anim.SetBool("Climbing", false);
                     if (Input.GetKeyDown(KeyCode.Space) && !VarManager.IsOnGround && tjump > 0)
                     {
                         ceiling = trsn.position.y + maxY;
                         AbleToJump = true;
+                        AudioManager.j = true;
                     }
                     if (Input.GetKey(KeyCode.Space) && trsn.position.y < ceiling && AbleToJump && tjump > 0)
                     {
                         rgd.velocity = new Vector2(rgd.velocity.x, speedY);
+                        if (VarManager.IsOnGround)
+                        {
+                            AudioManager.j = true;
+                        }
                     }
                     else if ((Input.GetKeyUp(KeyCode.Space) || trsn.position.y >= ceiling) && AbleToJump)
                     {
@@ -76,29 +92,35 @@ public class Movement : MonoBehaviour
                 }
                 else
                 {
-
+                    anim.SetBool("Climbing", true);
                     if (Input.GetKey(KeyCode.Space))
                     {
                         rgd.velocity = new Vector2(rgd.velocity.x, speedY);
                         ceiling = trsn.position.y + maxY;
+                        anim.SetFloat("s", 1);
                     }
                     else if (Input.GetKey(KeyCode.S))
                     {
                         rgd.velocity = new Vector2(rgd.velocity.x, -speedY);
+                        anim.SetFloat("s", -1);
                     }
                     else
                     {
                         rgd.velocity = new Vector2(rgd.velocity.x, 0);
+                        anim.SetFloat("s", 0);
                     }
 
                 }
 
 
-                if (AbleToHook && Input.GetKeyDown(KeyCode.LeftControl))
+                if (AbleToHook && Input.GetKeyDown(KeyCode.RightControl))
                 {
+                    AudioManager.hk = true;
                     IsHooked = true;
+                    tjump = defaultTjump - 1;
                     rgd.velocity = new Vector2(0, 0);
                     rgd.gravityScale = 0;
+                    ln.enabled = true;
                 }
 
 
@@ -116,7 +138,7 @@ public class Movement : MonoBehaviour
                 }
 
 
-                if (Input.GetKeyDown(KeyCode.LeftShift) && AbleToDash)
+                if (Input.GetKeyDown(KeyCode.LeftShift) && AbleToDash && !IsHooked)
                 {
                     StartCoroutine(dash());
                 }
@@ -140,22 +162,22 @@ public class Movement : MonoBehaviour
                     rgd.velocity = new Vector2(rgd.velocity.x, 0);
                 }
 
-                if (Input.GetKeyDown(KeyCode.LeftControl))
+                if (Input.GetKeyDown(KeyCode.RightControl))
                 {
+                    AudioManager.hk = true;
                     IsHooked = false;
+                    AbleToDash = true;
                     rgd.gravityScale = 2;
+                    ln.enabled = false;
                 }
             }
         }
     }
     IEnumerator dash()
     {
-        if (VarManager.IsOnGround)
-        {
-            VarManager.IsOnGround = false;
-            n = true;
-        }
+        AudioManager.d = true;
         IsDashActive = true;
+        anim.SetBool("Dash", true);
         AbleToDash = false;
         rgd.velocity = new Vector2((IsTurned ? -speedX : speedX) * 2, 0);
         rgd.constraints = RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
@@ -163,12 +185,10 @@ public class Movement : MonoBehaviour
         rgd.velocity = new Vector2(0, 0);
         rgd.constraints = RigidbodyConstraints2D.FreezeRotation;
         IsDashActive = false;
+        anim.SetBool("Dash", false);
         yield return new WaitForSeconds(0.2f);
-        if (n)
+        if (VarManager.IsOnGround)
         {
-            tjump = defaultTjump;
-            VarManager.IsOnGround = true;
-            n = false;
             AbleToDash = true;
         }
     }
