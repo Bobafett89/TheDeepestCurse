@@ -1,0 +1,5 @@
+1.01 changes
+The darkness is existing now, in 1.0 it was turned off by mistake
+Access to Lantern room rune added previously i forgot add 2 platforms
+1.02 changes
+1 void ring(on the path from hook to lantern) was added previously i forgot to add it

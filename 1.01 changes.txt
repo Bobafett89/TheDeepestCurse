@@ -1,2 +1,0 @@
-The darkness is existing now, in 1.0 it was turned off by mistake
-Access to Lantern room rune added, previously i forgot add 2 platforms
