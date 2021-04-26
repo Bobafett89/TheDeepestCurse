@@ -813,11 +813,11 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: This game is metroidvania with 2 endings. At the begging you wil have 50(Normal)
-    hp and every 10(Normal) seconds you wil lose 1 hp but you can find runes which
-    gives you 15 additional hp each. In this game you can not end it with the first
-    try do not despair. After all with each playthrough you will go depeer and deeper.
-    Good luck!
+  m_Text: This game is metroidvania with 2 endings. At the beggining you wil have
+    50(Normal) hp and every 10(Normal) seconds you wil lose 1 hp but you can find
+    runes which gives you 15 additional hp each. In this game you may end it with
+    not the first try do not despair. After all with each playthrough you will go
+    depeer and deeper. Good luck!nd deeper. Good luck!
 --- !u!222 &1231762797
 CanvasRenderer:
   m_ObjectHideFlags: 0
