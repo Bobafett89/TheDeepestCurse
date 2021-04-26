@@ -7,4 +7,6 @@ Access to Lantern room rune added previously i forgot add 2 platforms
 The game was optimizied(The static objects were marked as static)
 Jump sound at start of the game is fixed
 1.04 changes
-The rules were fixed;
+The rules were fixed
+1.041 changes
+The rules were fixed №2
