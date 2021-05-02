@@ -10,3 +10,5 @@ Jump sound at start of the game is fixed
 The rules were fixed
 1.041 changes
 The rules were fixed №2
+1.041 new change
+In controls and rules "dash - left shift" were added
