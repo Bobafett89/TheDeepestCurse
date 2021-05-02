@@ -902,15 +902,17 @@ MonoBehaviour:
 
     Jump, Climb Up - Space
 
-    Climb
-    down - S
+    Dash
+    - Left shift
+
+    Climb down - S
 
     Use pickaxe - Right shift
 
-    Hook - Right control
+    Hook - Right
+    control
 
-    Escape
-    - Go to main menu'
+    Escape - Go to main menu'
 --- !u!222 &1557972515
 CanvasRenderer:
   m_ObjectHideFlags: 0
